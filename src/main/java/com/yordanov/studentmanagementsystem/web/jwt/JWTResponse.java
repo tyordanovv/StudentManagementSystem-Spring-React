@@ -9,7 +9,7 @@ import java.util.List;
 @Getter
 @Setter
 public class JWTResponse {
-    private String token;
+    private String accessToken;
     private String type = "Bearer";
     private Long id;
     private String username;
@@ -23,10 +23,10 @@ public class JWTResponse {
             String email,
             List<String> roles
     ){
-        this.token = accessToken;
+        this.accessToken = accessToken;
         this.id=id;
-        this.email=email;
         this.username=username;
+        this.email=email;
         this.roles=roles;
     }
 }

@@ -3,9 +3,11 @@ package com.yordanov.studentmanagementsystem.service.userDetails;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.yordanov.studentmanagementsystem.model.user.User;
 import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Collection;
 import java.util.List;
@@ -19,10 +21,10 @@ public class UserDetailsImplementation implements UserDetails {
 
     private String username;
 
-    private String email;
-
     @JsonIgnore
     private String password;
+
+    private String email;
 
     private Collection<? extends GrantedAuthority> authorities;
 
@@ -32,24 +34,24 @@ public class UserDetailsImplementation implements UserDetails {
                 .collect(Collectors.toList());
         return new UserDetailsImplementation(
                 user.getId(),
-                user.getEmail(),
                 user.getUsername(),
                 user.getPassword(),
+                user.getEmail(),
                 authorities
         );
     }
 
     public UserDetailsImplementation(
             Long id,
-            String email,
-            String password,
             String username,
+            String password,
+            String email,
             Collection<? extends GrantedAuthority> authorities
     ){
         this.id = id;
-        this.email = email;
         this.username=username;
         this.password = password;
+        this.email = email;
         this.authorities = authorities;
     }
 
@@ -65,7 +67,7 @@ public class UserDetailsImplementation implements UserDetails {
 
     @Override
     public String getUsername() {
-        return null;
+        return username;
     }
 
     @Override
