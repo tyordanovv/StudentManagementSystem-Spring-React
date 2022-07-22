@@ -78,12 +78,6 @@ const Home = (props) => {
     );
   }, [content]);
   return (
-    // <div className="home-page">
-    //   <NavigationBar user={props.user} handleLogout={props.handleLogout} />
-    //   {/* <h1>Home</h1> */}
-    //   <SideMenu user={props.user} />
-    // </div>
-
     <div>
       <Layout
         style={{
