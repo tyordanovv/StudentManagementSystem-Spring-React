@@ -73,4 +73,10 @@ public class User {
         this.lastName=lastName;
         this.birthday = new SimpleDateFormat("dd/MM/yyyy").parse(birthday);
     }
+
+    public String getBirthday(){
+        if (birthday == null){
+            return "00/00/0000";
+        }else return birthday.toString();
+    }
 }

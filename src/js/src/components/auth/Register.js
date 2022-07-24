@@ -1,150 +1,166 @@
-import React, { useState, useRef } from "react";
-import Form from "react-validation/build/form";
-import Input from "react-validation/build/input";
-import CheckButton from "react-validation/build/button";
-import { isEmail } from "validator";
+import {
+  Button,
+  Col,
+  DatePicker,
+  Drawer,
+  Form,
+  Input,
+  Row,
+  Select,
+  Space,
+} from "antd";
 import AuthService from "../services/auth.service";
-const required = (value) => {
-  if (!value) {
-    return (
-      <div className="invalid-feedback d-block">This field is required!</div>
-    );
-  }
-};
-const validEmail = (value) => {
-  if (!isEmail(value)) {
-    return (
-      <div className="invalid-feedback d-block">This is not a valid email.</div>
-    );
-  }
-};
-const vusername = (value) => {
-  if (value.length < 3 || value.length > 20) {
-    return (
-      <div className="invalid-feedback d-block">
-        The username must be between 3 and 20 characters.
-      </div>
-    );
-  }
-};
-const vpassword = (value) => {
-  if (value.length < 6 || value.length > 40) {
-    return (
-      <div className="invalid-feedback d-block">
-        The password must be between 6 and 40 characters.
-      </div>
-    );
-  }
-};
+
+const { Option } = Select;
+
 const Register = (props) => {
-  const form = useRef();
-  const checkBtn = useRef();
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [successful, setSuccessful] = useState(false);
-  const [message, setMessage] = useState("");
-  const onChangeUsername = (e) => {
-    const username = e.target.value;
-    setUsername(username);
+  const onChange = (date, dateString) => {
+    console.log(date, dateString);
   };
-  const onChangeEmail = (e) => {
-    const email = e.target.value;
-    setEmail(email);
-  };
-  const onChangePassword = (e) => {
-    const password = e.target.value;
-    setPassword(password);
-  };
-  const handleRegister = (e) => {
-    e.preventDefault();
-    setMessage("");
-    setSuccessful(false);
-    form.current.validateAll();
-    if (checkBtn.current.context._errors.length === 0) {
-      AuthService.register(username, email, password).then(
-        (response) => {
-          setMessage(response.data.message);
-          setSuccessful(true);
-        },
-        (error) => {
-          const resMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
-          setMessage(resMessage);
-          setSuccessful(false);
-        }
-      );
-    }
-  };
+
+  const formSubmitHandler = () => {};
+
+  const onFinishFailed = () => {};
+
   return (
-    <div className="col-md-12">
-      <div className="card card-container">
-        <img
-          src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-          alt="profile-img"
-          className="profile-img-card"
-        />
-        <Form onSubmit={handleRegister} ref={form}>
-          {!successful && (
-            <div>
-              <div className="form-group">
-                <label htmlFor="username">Username</label>
-                <Input
-                  type="text"
-                  className="form-control"
-                  name="username"
-                  value={username}
-                  onChange={onChangeUsername}
-                  validations={[required, vusername]}
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="email">Email</label>
-                <Input
-                  type="text"
-                  className="form-control"
-                  name="email"
-                  value={email}
-                  onChange={onChangeEmail}
-                  validations={[required, validEmail]}
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="password">Password</label>
-                <Input
-                  type="password"
-                  className="form-control"
-                  name="password"
-                  value={password}
-                  onChange={onChangePassword}
-                  validations={[required, vpassword]}
-                />
-              </div>
-              <div className="form-group">
-                <button className="btn btn-primary btn-block">Sign Up</button>
-              </div>
-            </div>
-          )}
-          {message && (
-            <div className="form-group">
-              <div
-                className={
-                  successful ? "alert alert-success" : "alert alert-danger"
-                }
-                role="alert"
+    <>
+      <Drawer
+        title="Create a new account"
+        width={720}
+        onClose={props.onClose}
+        visible={props.visible}
+        bodyStyle={{
+          paddingBottom: 80,
+        }}
+        extra={
+          <Space>
+            <Button onClick={props.onClose}>Cancel</Button>
+            <Button onClick={() => AuthService.register} type="primary">
+              Submit
+            </Button>
+          </Space>
+        }
+      >
+        <Form
+          layout="vertical"
+          hideRequiredMark
+          onFinish={(values) => formSubmitHandler(values)}
+          onFinishFailed={onFinishFailed}
+        >
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item
+                name="firstName"
+                label="First Name"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter user first name",
+                  },
+                ]}
               >
-                {message}
-              </div>
-            </div>
-          )}
-          <CheckButton style={{ display: "none" }} ref={checkBtn} />
+                <Input placeholder="Please enter user first name" />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                name="lastName"
+                label="Last Name"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter user last name",
+                  },
+                ]}
+              >
+                <Input placeholder="Please enter user last name" />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item
+                name="email"
+                label="Email"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter user email",
+                  },
+                ]}
+              >
+                <Input placeholder="Please enter user email" />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                name="birthday"
+                label="Birthday"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter your birthday",
+                  },
+                ]}
+              >
+                <DatePicker onChange={onChange} />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item
+                name="password"
+                label="Password"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter user password",
+                  },
+                ]}
+              >
+                <Input placeholder="Please enter user password" />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                name="confirm-password"
+                label="Confirm Password"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please confirm user password",
+                  },
+                ]}
+              >
+                <Input placeholder="Please confirm user password" />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item
+                name="type"
+                label="Type"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please choose the type",
+                  },
+                ]}
+              >
+                <Select placeholder="Please choose the type">
+                  <Option value="teacher">Teacher</Option>
+                  <Option value="assistant">Assistant</Option>
+                  <Option value="student">Student</Option>
+                </Select>
+              </Form.Item>
+            </Col>
+          </Row>
         </Form>
-      </div>
-    </div>
+      </Drawer>
+    </>
   );
 };
+
 export default Register;

@@ -1,10 +1,6 @@
 import UserService from "../services/user.service";
-// import NavigationBar from "./NavigationBar";
-// import SideMenu from "./SideMenu";
+import Register from "../auth/Register";
 import {
-  // DesktopOutlined,
-  // FileOutlined,
-  // PieChartOutlined,
   TeamOutlined,
   UserOutlined,
   BookOutlined,
@@ -24,44 +20,46 @@ function getItem(label, key, icon, children) {
   };
 }
 
-const items = [
-  // getItem("Profile", "profile", <UserOutlined />),
-  // getItem("Option 1", "1", <PieChartOutlined />),
-  // getItem("Option 2", "2", <DesktopOutlined />),
-  // getItem("User", "sub1", <UserOutlined />, [
-  //   getItem("Tom", "3"),
-  //   getItem("Bill", "4"),
-  //   getItem("Alex", "5"),
-  // ]),
-  // getItem("Team", "sub2", <TeamOutlined />, [
-  //   getItem("Team 1", "6"),
-  //   getItem("Team 2", "8"),
-  // ]),
-  // getItem("Files", "9", <FileOutlined />),
-  getItem("Profile", "profile", <UserOutlined />),
-  getItem("Programs", "sub1", <BookOutlined />, [
-    getItem("View Path", "1", null, []),
-    getItem("View Subjets", "2", null, []),
-    getItem("Create Path", "3"),
-    getItem("Create Subject", "4"),
-  ]),
-  getItem("Users", "sub2", <TeamOutlined />, [
-    getItem("View Students", "5"),
-    getItem("View Staff Members", "6", null, [
-      getItem("Teachers", "7"),
-      getItem("Assistants", "8"),
-    ]),
-    getItem("Add User", "sub3"),
-  ]),
-  getItem("Settings", "sub4", <SettingOutlined />, [
-    getItem("Settings", "9"),
-    getItem("Messages", "10"),
-  ]),
-];
-
 const Home = (props) => {
   const [content, setContent] = useState("");
   const [collapsed, setCollapsed] = useState(false);
+  const [visible, setVisible] = useState(false);
+
+  const showDrawer = () => {
+    setVisible(true);
+  };
+
+  const onClose = () => {
+    setVisible(false);
+  };
+
+  const items = [
+    getItem("Profile", "profile", <UserOutlined />),
+    getItem("Programs", "sub1", <BookOutlined />, [
+      getItem("View Path", "1", null, []),
+      getItem("View Subjets", "2", null, []),
+      getItem("Create Path", "3"),
+      getItem("Create Subject", "4"),
+    ]),
+    getItem("Users", "sub2", <TeamOutlined />, [
+      getItem("View Students", "5"),
+      getItem("View Staff Members", "6", null, [
+        getItem("Teachers", "7"),
+        getItem("Assistants", "8"),
+      ]),
+      getItem(
+        <a href="#" onClick={showDrawer}>
+          Add User
+        </a>,
+        "sub3"
+      ),
+    ]),
+    getItem("Settings", "sub4", <SettingOutlined />, [
+      getItem("Settings", "9"),
+      getItem("Messages", "10"),
+    ]),
+    getItem(<a onClick={props.handleLogout}>Logout</a>, "logout", null),
+  ];
 
   useEffect(() => {
     UserService.getPublicContent().then(
@@ -79,6 +77,7 @@ const Home = (props) => {
   }, [content]);
   return (
     <div>
+      <Register onClose={onClose} showDrawer={showDrawer} visible={visible} />
       <Layout
         style={{
           minHeight: "100vh",
