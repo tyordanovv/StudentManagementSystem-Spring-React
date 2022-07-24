@@ -1,5 +1,6 @@
 package com.yordanov.studentmanagementsystem.model.schoolStuff;
 
+import com.sun.istack.NotNull;
 import com.yordanov.studentmanagementsystem.model.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,32 +10,37 @@ import javax.persistence.*;
 import java.util.Set;
 import java.util.UUID;
 
+@Table(name = "projects")
 @Entity
-@Table(name = "courses")
 @Getter
 @Setter
 @NoArgsConstructor
-public class Course {
+public class Project {
     @Id
-    @Column(name = "course_id")
+    @Column(name = "project_id")
     private UUID id;
 
-    @Column(name = "name", length = 50)
+    @NotNull
+    @Column(length = 50)
     private String name;
 
-    @Column(name = "description")
+    @NotNull
     private String description;
 
-    @OneToMany
-    @JoinColumn(name = "project_id")
-    private Set<Project> projects;
-
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "course_teachers",
-            joinColumns = @JoinColumn(name = "course_id"),
+            name = "student_projects",
+            joinColumns = @JoinColumn(name = "project_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    private Set<User> teachers;
+    private Set<User> students;
+
+    @ManyToOne
+    @JoinColumn(name = "course_id")
+    private Course course;
+
+    @OneToOne
+    @JoinColumn(name = "note_id")
+    private Note note;
 
 }

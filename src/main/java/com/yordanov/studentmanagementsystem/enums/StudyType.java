@@ -1,4 +1,6 @@
 package com.yordanov.studentmanagementsystem.enums;
 
-public enum Semester {
+public enum StudyType {
+    BACHELOR,
+    MASTER
 }
