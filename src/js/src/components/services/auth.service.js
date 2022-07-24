@@ -1,25 +1,40 @@
 import axios from "axios";
 import { apiUrls } from "../common/variables";
+import { errorNotification } from "../common/Notification";
 
-const register = (username, email, password) => {
-  return axios.post(apiUrls.Auth + "register", {
-    username,
+const register = (firstName, lastName, birthday, email, password, roles) => {
+  const response = axios.post(apiUrls.Auth + "register", {
+    firstName,
+    lastName,
+    birthday,
     email,
     password,
+    roles,
   });
+  console.log(response.data);
+  return response.data;
 };
 
 const login = async (username, password) => {
-  const response = await axios.post(apiUrls.Auth + "login", {
-    username,
-    password,
-  });
-  if (response.data.username) {
-    console.log("user stored");
-    localStorage.setItem("user", JSON.stringify(response.data));
+  console.log("start");
+  try {
+    const response = await axios.post(apiUrls.Auth + "login", {
+      username,
+      password,
+    });
+    if (response.data.username) {
+      console.log("user stored");
+      localStorage.setItem("user", JSON.stringify(response.data));
+    }
+    return response.data;
+  } catch (error) {
+    errorNotification(
+      "Bad credentials",
+      "Username or password that you have entered cannot be found!"
+    );
   }
-  console.log(response.data);
-  return response.data;
+  // console.log(response.data);
+  // return response.data;
 };
 
 const logout = () => {

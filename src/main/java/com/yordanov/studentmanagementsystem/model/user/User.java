@@ -1,13 +1,14 @@
 package com.yordanov.studentmanagementsystem.model.user;
 
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
 import com.yordanov.studentmanagementsystem.model.role.Role;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,6 +30,10 @@ public class User {
     @NotNull
     @Column(length = 50, name = "username")
     private String username;
+
+    @NotNull
+    @Column(name = "birthday")
+    private Date birthday;
 
     @NotNull
     @Column(name = "password",length = 60)
@@ -57,14 +62,22 @@ public class User {
     public User(
             String username,
             String password,
-//            String firstName,
-//            String lastName,
-            String email
-    ){
+            String firstName,
+            String lastName,
+            String email,
+            String birthday
+    ) throws ParseException {
         this.password=password;
         this.username=username;
         this.email=email;
-//        this.firstName=firstName;
-//        this.lastName=lastName;
+        this.firstName=firstName;
+        this.lastName=lastName;
+        this.birthday = new SimpleDateFormat("dd/MM/yyyy").parse(birthday);
+    }
+
+    public String getBirthday(){
+        if (birthday == null){
+            return "00/00/0000";
+        }else return birthday.toString();
     }
 }

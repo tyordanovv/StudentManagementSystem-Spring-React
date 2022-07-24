@@ -9,6 +9,7 @@ import com.yordanov.studentmanagementsystem.requestBodies.LoginRequest;
 import com.yordanov.studentmanagementsystem.requestBodies.RegisterRequest;
 import com.yordanov.studentmanagementsystem.service.userDetails.UserDetailsImplementation;
 import com.yordanov.studentmanagementsystem.service.userDetails.UserDetailsServiceImplementation;
+import com.yordanov.studentmanagementsystem.utils.Generator;
 import com.yordanov.studentmanagementsystem.web.jwt.JWTResponse;
 import com.yordanov.studentmanagementsystem.web.jwt.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,19 +18,16 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.ParseException;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -78,13 +76,23 @@ public class AuthenticationController {
                     jwt,
                     userDetails.getId(),
                     userDetails.getUsername(),
+                    userDetails.getFirstName(),
+                    userDetails.getLastName(),
+                    userDetails.getBirthday().substring(0, 10),
                     userDetails.getEmail(),
                     roles));
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody RegisterRequest registerRequest){
-        if (staffRepository.existsByUsername(registerRequest.getUsername())){
+    public ResponseEntity<?> registerUser(
+            @RequestBody RegisterRequest registerRequest
+    ) throws ParseException {
+
+        String username = Generator.generateUsername(
+                registerRequest.getFirstName(),
+                registerRequest.getLastName());
+
+        if (staffRepository.existsByUsername(username)){
             return ResponseEntity
                     .badRequest()
                     .body(new RuntimeException("Username is already taken!"));
@@ -97,10 +105,12 @@ public class AuthenticationController {
         }
 
         User user = new User(
-                registerRequest.getUsername(),
-//                registerRequest.getPassword(),
+                username,
                 passwordEncoder.encode(registerRequest.getPassword()),
-                registerRequest.getEmail()
+                registerRequest.getFirstName(),
+                registerRequest.getLastName(),
+                registerRequest.getEmail(),
+                registerRequest.getBirthday()
         );
         Set<String> stringSet = registerRequest.getStrRoles();
         Set<Role> roles = new HashSet<>();
@@ -142,7 +152,6 @@ public class AuthenticationController {
 
         user.setRoles(roles);
         staffRepository.save(user);
-
         return ResponseEntity.ok(new RuntimeException("successfully created"));
     }
 }

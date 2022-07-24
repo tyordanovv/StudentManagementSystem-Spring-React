@@ -21,6 +21,12 @@ public class UserDetailsImplementation implements UserDetails {
 
     private String username;
 
+    private String firstName;
+
+    private String lastName;
+
+    private String birthday;
+
     @JsonIgnore
     private String password;
 
@@ -34,6 +40,9 @@ public class UserDetailsImplementation implements UserDetails {
                 .collect(Collectors.toList());
         return new UserDetailsImplementation(
                 user.getId(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getBirthday().toString(),
                 user.getUsername(),
                 user.getPassword(),
                 user.getEmail(),
@@ -43,12 +52,18 @@ public class UserDetailsImplementation implements UserDetails {
 
     public UserDetailsImplementation(
             Long id,
+            String firstName,
+            String lastName,
+            String birthday,
             String username,
             String password,
             String email,
             Collection<? extends GrantedAuthority> authorities
     ){
         this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.birthday = birthday;
         this.username=username;
         this.password = password;
         this.email = email;

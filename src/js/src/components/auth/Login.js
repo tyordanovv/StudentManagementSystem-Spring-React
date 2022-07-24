@@ -1,16 +1,16 @@
 import React from "react";
 import { Button, Form, Input } from "antd";
 import AuthService from "../services/auth.service";
+import { errorNotification } from "../common/Notification";
 
 export default function Login(props) {
   // const [logged, setLogged] = React.useState(false);
 
   const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
+    errorNotification();
   };
 
   function formSubmitHandler(values) {
-    console.log("Success:", values);
     AuthService.login(values.username, values.password);
     if (AuthService.getCurrentUser) {
       console.log("usara e tuka");
