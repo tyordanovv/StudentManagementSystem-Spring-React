@@ -110,7 +110,9 @@ public class AuthenticationController {
                 registerRequest.getFirstName(),
                 registerRequest.getLastName(),
                 registerRequest.getEmail(),
-                registerRequest.getBirthday()
+                registerRequest.getBirthday(),
+                registerRequest.getAddress(),
+                registerRequest.getNumber()
         );
         Set<String> stringSet = registerRequest.getStrRoles();
         Set<Role> roles = new HashSet<>();

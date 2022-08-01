@@ -1,16 +1,19 @@
 package com.yordanov.studentmanagementsystem.model.schoolStuff;
 
 import com.sun.istack.NotNull;
-import com.yordanov.studentmanagementsystem.model.user.User;
+import com.yordanov.studentmanagementsystem.model.relation.UserProject;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
-@Table(name = "projects")
+@Table(
+        name = "project",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = "name")
+        })
 @Entity
 @Getter
 @Setter
@@ -18,7 +21,8 @@ import java.util.UUID;
 public class Project {
     @Id
     @Column(name = "project_id")
-    private UUID id;
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    private Long id;
 
     @NotNull
     @Column(length = 50)
@@ -27,20 +31,26 @@ public class Project {
     @NotNull
     private String description;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "student_projects",
-            joinColumns = @JoinColumn(name = "project_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    private Set<User> students;
+    @OneToMany(mappedBy = "project")
+    private Set<UserProject> userProjects = new HashSet<>();
 
-    @ManyToOne
-    @JoinColumn(name = "course_id")
-    private Course course;
+    public Project(
+            String name,
+            String description
+    ){
+        this.name = name;
+        this.description = description;
+    }
+    public Set<UserProject> getUserProjects() {
+        return userProjects;
+    }
 
-    @OneToOne
-    @JoinColumn(name = "note_id")
-    private Note note;
+    public void setUserProjects(Set<UserProject> projects) {
+        this.userProjects = projects;
+    }
+
+    public void addUserProjects(UserProject userProject) {
+        this.userProjects.add(userProject);
+    }
 
 }

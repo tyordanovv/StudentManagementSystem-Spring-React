@@ -1,7 +1,8 @@
 package com.yordanov.studentmanagementsystem.model.schoolStuff;
 
 import com.sun.istack.NotNull;
-import com.yordanov.studentmanagementsystem.enums.StudyType;
+import com.yordanov.studentmanagementsystem.model.user.User;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,19 +12,20 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Table(
-        name = "path",
+        name = "subject",
         uniqueConstraints = {
-                @UniqueConstraint(columnNames = "name")
+            @UniqueConstraint(columnNames = "name")
         }
 )
 @Entity
-@NoArgsConstructor
 @Getter
 @Setter
-public class Path {
+@NoArgsConstructor
+@AllArgsConstructor
+public class Subject {
     @Id
+    @Column(name = "subject_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "path_id")
     private Long id;
 
     @NotNull
@@ -34,18 +36,13 @@ public class Path {
     private String description;
 
     @NotNull
-    @Enumerated(EnumType.STRING)
-    @Column(length = 20)
-    private StudyType type;
-
-    @NotNull
-    private int semesters;
+    private int semester;
 
     @ManyToMany
     @JoinTable(
-            name = "path_subjects",
-            joinColumns = @JoinColumn(name = "path_id"),
-            inverseJoinColumns = @JoinColumn(name = "subject_id")
+            name = "subject_teachers",
+            joinColumns = @JoinColumn(name = "subject_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    private Set<Subject> subjects = new HashSet<>();
+    private Set<User> teachers = new HashSet<>();
 }

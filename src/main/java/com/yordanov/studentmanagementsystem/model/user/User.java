@@ -1,27 +1,30 @@
 package com.yordanov.studentmanagementsystem.model.user;
 
 import com.sun.istack.NotNull;
+import com.yordanov.studentmanagementsystem.model.relation.UserProject;
 import com.yordanov.studentmanagementsystem.model.role.Role;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+
 @Getter
 @Setter
 @Entity
 @Table(
-        name = "users",
+        name = "user",
         uniqueConstraints = {
                 @UniqueConstraint(columnNames = "username"),
                 @UniqueConstraint(columnNames = "email")
         })
-public class User {
+public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
@@ -34,6 +37,14 @@ public class User {
     @NotNull
     @Column(name = "birthday")
     private Date birthday;
+
+    @NotNull
+    @Column(name = "number", length = 15)
+    private int number;
+
+    @NotNull
+    @Column(name = "address", length = 50)
+    private String address;
 
     @NotNull
     @Column(name = "password",length = 60)
@@ -57,6 +68,20 @@ public class User {
     inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
+    @OneToMany(mappedBy = "user")
+    private Set<UserProject> userProjects = new HashSet<>();
+
+    public Set<UserProject> getUserProjects() {
+        return userProjects;
+    }
+
+    public void setUserProjects(Set<UserProject> projects) {
+        this.userProjects = projects;
+    }
+
+    public void addUserProjects(UserProject userProject) {
+        this.userProjects.add(userProject);
+    }
     public User(){}
 
     public User(
@@ -65,7 +90,9 @@ public class User {
             String firstName,
             String lastName,
             String email,
-            String birthday
+            String birthday,
+            String address,
+            int number
     ) throws ParseException {
         this.password=password;
         this.username=username;
@@ -73,6 +100,8 @@ public class User {
         this.firstName=firstName;
         this.lastName=lastName;
         this.birthday = new SimpleDateFormat("dd/MM/yyyy").parse(birthday);
+        this.address = address;
+        this.number = number;
     }
 
     public String getBirthday(){
