@@ -45,4 +45,14 @@ public class Subject {
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private Set<User> teachers = new HashSet<>();
+
+    public Subject(
+            String name,
+            String description,
+            int semester
+    ){
+        this.name = name;
+        this.description = description;
+        this.semester = semester;
+    }
 }

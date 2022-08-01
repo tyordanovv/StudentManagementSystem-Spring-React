@@ -48,4 +48,19 @@ public class Path {
             inverseJoinColumns = @JoinColumn(name = "subject_id")
     )
     private Set<Subject> subjects = new HashSet<>();
+
+    public Path(
+            String name,
+            String description,
+            StudyType type
+    ){
+        this.name = name;
+        this.description = description;
+        this.type = type;
+        if (type == StudyType.BACHELOR){
+            this.semesters = 6;
+        } else if (type == StudyType.MASTER){
+            this.semesters = 3;
+        }
+    }
 }

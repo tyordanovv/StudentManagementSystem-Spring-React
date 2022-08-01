@@ -34,12 +34,18 @@ public class Project {
     @OneToMany(mappedBy = "project")
     private Set<UserProject> userProjects = new HashSet<>();
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "subject_id")
+    private Subject subject;
+
     public Project(
             String name,
-            String description
+            String description,
+            Subject subject
     ){
         this.name = name;
         this.description = description;
+        this.subject = subject;
     }
     public Set<UserProject> getUserProjects() {
         return userProjects;
