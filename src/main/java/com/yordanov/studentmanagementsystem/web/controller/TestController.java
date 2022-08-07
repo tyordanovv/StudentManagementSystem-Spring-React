@@ -50,12 +50,12 @@ public class TestController {
 
     @GetMapping("/save")
     public String save() throws ParseException {
-        User student = userRepository.findByUsername("tisho2").orElseThrow(() -> new RuntimeException("nqma tisho 2"));
+        User student = userRepository.findByUsername("tisho3").orElseThrow(() -> new RuntimeException("nqma tisho 3"));
         Subject subject = subjectRepository.findByName("subject1");
 
         Project project = new Project(
-                "java5",
-                "java5 be",
+                "java9",
+                "java9 be",
                 subject
 
         );

@@ -7,13 +7,13 @@ export default function Login(props) {
   // const [logged, setLogged] = React.useState(false);
 
   const onFinishFailed = (errorInfo) => {
+    console.log(errorInfo);
     errorNotification();
   };
 
   function formSubmitHandler(values) {
     AuthService.login(values.username, values.password);
     if (AuthService.getCurrentUser) {
-      console.log("usara e tuka");
       props.handleLogin();
     }
   }

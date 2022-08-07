@@ -8,6 +8,8 @@ import {
 } from "@ant-design/icons";
 import { Layout, Menu, PageHeader } from "antd";
 import React, { useState, useEffect } from "react";
+import CreatePath from "../drawers/CreatePath";
+import CreateSubject from "../drawers/CreateSubject";
 
 const { Content, Footer, Sider } = Layout;
 
@@ -21,25 +23,47 @@ function getItem(label, key, icon, children) {
 }
 
 const Home = (props) => {
+  console.log("in3");
   const [content, setContent] = useState("");
   const [collapsed, setCollapsed] = useState(false);
-  const [visible, setVisible] = useState(false);
+  const [visibleRegisterDrawer, setVisibleRegisterDrawer] = useState(false);
+  const [visiblePathDrawer, setVisiblePathDrawer] = useState(false);
+  const [visibleSubjectDrawer, setVisibleSubjectDrawer] = useState(false);
 
-  const showDrawer = () => {
-    setVisible(true);
+  const showRegisterDrawer = () => {
+    setVisibleRegisterDrawer(true);
   };
 
+  const showPathDrawer = () => {
+    setVisiblePathDrawer(true);
+  };
+  const showSubjectDrawer = () => {
+    setVisibleSubjectDrawer(true);
+  };
   const onClose = () => {
-    setVisible(false);
+    setVisibleRegisterDrawer(false);
+    setVisiblePathDrawer(false);
+    setVisibleSubjectDrawer(false);
   };
 
   const items = [
+    getItem("Homepage", "homepage", <UserOutlined />),
     getItem("Profile", "profile", <UserOutlined />),
     getItem("Programs", "sub1", <BookOutlined />, [
       getItem("View Path", "1", null, []),
       getItem("View Subjets", "2", null, []),
-      getItem("Create Path", "3"),
-      getItem("Create Subject", "4"),
+      getItem(
+        <a href="#" onClick={showPathDrawer}>
+          Create Path
+        </a>,
+        "3"
+      ),
+      getItem(
+        <a href="#" onClick={showSubjectDrawer}>
+          Create Subject
+        </a>,
+        "4"
+      ),
     ]),
     getItem("Users", "sub2", <TeamOutlined />, [
       getItem("View Students", "5"),
@@ -48,7 +72,7 @@ const Home = (props) => {
         getItem("Assistants", "8"),
       ]),
       getItem(
-        <a href="#" onClick={showDrawer}>
+        <a href="#" onClick={showRegisterDrawer}>
           Add User
         </a>,
         "sub3"
@@ -77,7 +101,21 @@ const Home = (props) => {
   }, [content]);
   return (
     <div>
-      <Register onClose={onClose} showDrawer={showDrawer} visible={visible} />
+      <Register
+        onClose={onClose}
+        showDrawer={showRegisterDrawer}
+        visible={visibleRegisterDrawer}
+      />
+      <CreatePath
+        onClose={onClose}
+        showDrawer={showPathDrawer}
+        visible={visiblePathDrawer}
+      />
+      <CreateSubject
+        onClose={onClose}
+        showDrawer={showSubjectDrawer}
+        visible={visibleSubjectDrawer}
+      />
       <Layout
         style={{
           minHeight: "100vh",

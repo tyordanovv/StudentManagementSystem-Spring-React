@@ -10,41 +10,22 @@ import {
   Space,
 } from "antd";
 import AuthService from "../services/auth.service";
+import SchoolStuff from "../services/SchoolStuff";
 import { errorNotification } from "../common/Notification";
+import { useEffect, useState } from "react";
 
-const { Option } = Select;
+const CreateSubject = (props) => {
+  const [teachers, setTeachers] = useState({});
 
-const Register = (props) => {
-  function padTo2Digits(number) {
-    return number.toString().padStart(2, "0");
-  }
-
-  function formatDate(date) {
-    return [
-      padTo2Digits(date.getDate()),
-      padTo2Digits(date.getMonth() + 1),
-      date.getFullYear(),
-    ].join("/");
-  }
-
-  const onDateChange = (date, dateString) => {
-    console.log(date, dateString);
-  };
+  useEffect(() => {
+    setTeachers(SchoolStuff.getTeachers());
+    console.log(teachers);
+  }, []);
 
   const onFinish = (values) => {
-    const user = {
-      firstName: values.firstName,
-      lastName: values.lastName,
-      birthday: formatDate(values.birthday._d),
-      email: values.email,
-      password: values.password,
-      roles: values.type,
-      address: values.address,
-      gender: values.gender,
-      number: values.number,
-    };
-    console.log(user);
-    AuthService.register(user, props.onClose);
+    const subject = {};
+    console.log(subject);
+    //schoolstuff service
   };
 
   const onFinishFailed = () => {
@@ -55,7 +36,7 @@ const Register = (props) => {
   return (
     <>
       <Drawer
-        title="Create a new account"
+        title="Create a new subject"
         width={720}
         onClose={props.onClose}
         visible={props.visible}
@@ -114,20 +95,6 @@ const Register = (props) => {
                 <Input placeholder="Please enter user address" />
               </Form.Item>
             </Col>
-            <Col span={12}>
-              <Form.Item
-                name="birthday"
-                label="Birthday"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter your birthday",
-                  },
-                ]}
-              >
-                <DatePicker onChange={onDateChange} />
-              </Form.Item>
-            </Col>
           </Row>
           <Row gutter={16}>
             <Col span={12}>
@@ -142,8 +109,8 @@ const Register = (props) => {
                 ]}
               >
                 <Select placeholder="Please choose gender">
-                  <Option value="male">Male</Option>
-                  <Option value="female">Female</Option>
+                  {/* <Option value="male">Male</Option>
+                      <Option value="female">Female</Option> */}
                 </Select>
               </Form.Item>
             </Col>
@@ -246,9 +213,9 @@ const Register = (props) => {
                 ]}
               >
                 <Select placeholder="Please choose the type">
-                  <Option value="teacher">Teacher</Option>
-                  <Option value="assistant">Assistant</Option>
-                  <Option value="student">Student</Option>
+                  {/* <Option value="teacher">Teacher</Option>
+                      <Option value="assistant">Assistant</Option>
+                      <Option value="student">Student</Option> */}
                 </Select>
               </Form.Item>
             </Col>
@@ -265,4 +232,4 @@ const Register = (props) => {
   );
 };
 
-export default Register;
+export default CreateSubject;

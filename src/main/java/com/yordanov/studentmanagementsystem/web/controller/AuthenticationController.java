@@ -1,5 +1,6 @@
 package com.yordanov.studentmanagementsystem.web.controller;
 
+import com.yordanov.studentmanagementsystem.enums.Gender;
 import com.yordanov.studentmanagementsystem.enums.RoleType;
 import com.yordanov.studentmanagementsystem.model.role.Role;
 import com.yordanov.studentmanagementsystem.model.user.User;
@@ -104,6 +105,16 @@ public class AuthenticationController {
                     .body(new RuntimeException("Email is taken!"));
         }
 
+        System.out.println(registerRequest.getGender());
+        System.out.println(registerRequest.getAddress());
+        System.out.println(registerRequest.getNumber());
+        System.out.println(registerRequest.getBirthday());
+        System.out.println(registerRequest.getPassword());
+        Gender userGender;
+        if (registerRequest.getGender().equals("male")){
+            userGender = Gender.MALE;
+        }else userGender = Gender.FEMALE;
+
         User user = new User(
                 username,
                 passwordEncoder.encode(registerRequest.getPassword()),
@@ -112,7 +123,8 @@ public class AuthenticationController {
                 registerRequest.getEmail(),
                 registerRequest.getBirthday(),
                 registerRequest.getAddress(),
-                registerRequest.getNumber()
+                Integer.parseInt(registerRequest.getNumber()),
+                userGender
         );
         Set<String> stringSet = registerRequest.getStrRoles();
         Set<Role> roles = new HashSet<>();

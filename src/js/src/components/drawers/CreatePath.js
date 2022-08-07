@@ -12,9 +12,7 @@ import {
 import AuthService from "../services/auth.service";
 import { errorNotification } from "../common/Notification";
 
-const { Option } = Select;
-
-const Register = (props) => {
+const CreatePath = (props) => {
   function padTo2Digits(number) {
     return number.toString().padStart(2, "0");
   }
@@ -44,7 +42,7 @@ const Register = (props) => {
       number: values.number,
     };
     console.log(user);
-    AuthService.register(user, props.onClose);
+    AuthService.register(user);
   };
 
   const onFinishFailed = () => {
@@ -142,8 +140,8 @@ const Register = (props) => {
                 ]}
               >
                 <Select placeholder="Please choose gender">
-                  <Option value="male">Male</Option>
-                  <Option value="female">Female</Option>
+                  {/* <Option value="male">Male</Option>
+                  <Option value="female">Female</Option> */}
                 </Select>
               </Form.Item>
             </Col>
@@ -246,9 +244,9 @@ const Register = (props) => {
                 ]}
               >
                 <Select placeholder="Please choose the type">
-                  <Option value="teacher">Teacher</Option>
+                  {/* <Option value="teacher">Teacher</Option>
                   <Option value="assistant">Assistant</Option>
-                  <Option value="student">Student</Option>
+                  <Option value="student">Student</Option> */}
                 </Select>
               </Form.Item>
             </Col>
@@ -265,4 +263,4 @@ const Register = (props) => {
   );
 };
 
-export default Register;
+export default CreatePath;

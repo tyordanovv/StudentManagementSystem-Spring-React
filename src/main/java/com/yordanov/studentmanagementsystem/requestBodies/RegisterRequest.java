@@ -1,6 +1,7 @@
 package com.yordanov.studentmanagementsystem.requestBodies;
 
 import com.sun.jdi.PrimitiveValue;
+import com.yordanov.studentmanagementsystem.enums.Gender;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -16,7 +17,8 @@ public class RegisterRequest {
     private String password;
     Set<String> strRoles;
     private String address;
-    private int number;
+    private String gender;
+    private String number;
 
 
 }

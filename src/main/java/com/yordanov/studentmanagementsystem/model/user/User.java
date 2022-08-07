@@ -1,6 +1,7 @@
 package com.yordanov.studentmanagementsystem.model.user;
 
 import com.sun.istack.NotNull;
+import com.yordanov.studentmanagementsystem.enums.Gender;
 import com.yordanov.studentmanagementsystem.model.relation.UserProject;
 import com.yordanov.studentmanagementsystem.model.role.Role;
 import lombok.Getter;
@@ -41,6 +42,10 @@ public class User implements Serializable {
     @NotNull
     @Column(name = "number", length = 15)
     private int number;
+
+    @NotNull
+    @Column(name = "gender")
+    private Gender gender;
 
     @NotNull
     @Column(name = "address", length = 50)
@@ -92,7 +97,8 @@ public class User implements Serializable {
             String email,
             String birthday,
             String address,
-            int number
+            int number,
+            Gender gender
     ) throws ParseException {
         this.password=password;
         this.username=username;
@@ -102,6 +108,7 @@ public class User implements Serializable {
         this.birthday = new SimpleDateFormat("dd/MM/yyyy").parse(birthday);
         this.address = address;
         this.number = number;
+        this.gender = gender;
     }
 
     public String getBirthday(){
