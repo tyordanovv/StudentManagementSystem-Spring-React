@@ -1,22 +1,19 @@
 import React from "react";
 import { Button, Form, Input } from "antd";
 import AuthService from "../services/auth.service";
-import { errorNotification } from "../common/Notification";
+import { useContext } from "react";
+import AuthContext from "../common/AuthProvider";
 
 export default function Login(props) {
-  // const [logged, setLogged] = React.useState(false);
+  const { setAuth } = useContext(AuthContext);
 
   const onFinishFailed = (errorInfo) => {
     console.log(errorInfo);
-    errorNotification();
   };
 
-  function formSubmitHandler(values) {
-    AuthService.login(values.username, values.password);
-    if (AuthService.getCurrentUser) {
-      props.handleLogin();
-    }
-  }
+  const formSubmitHandler = (values) => {
+    AuthService.login(values.username, values.password, setAuth);
+  };
 
   return (
     <div className="login-form">

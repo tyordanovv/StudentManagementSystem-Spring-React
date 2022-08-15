@@ -87,10 +87,10 @@ public class TestController {
                 "subject description",
                 1
         );
-        Set<User> teahers = new HashSet<>();
+        Set<User> teachers = new HashSet<>();
         User teacher = userRepository.findByUsername("tisho").orElseThrow(() -> new RuntimeException("nqma tisho"));
-        teahers.add(teacher);
-        subject.setTeachers(teahers);
+        teachers.add(teacher);
+        subject.setTeachers(teachers);
         subjectRepository.save(subject);
 
         Set<Subject> subjects = new HashSet<>();

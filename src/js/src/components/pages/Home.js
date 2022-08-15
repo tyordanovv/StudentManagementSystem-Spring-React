@@ -53,9 +53,11 @@ const Home = (props) => {
       getItem("View Path", "1", null, []),
       getItem("View Subjets", "2", null, []),
       getItem(
-        <a href="#" onClick={showPathDrawer}>
-          Create Path
-        </a>,
+        <p>
+          <a href="#" onClick={showPathDrawer}>
+            Create Path
+          </a>
+        </p>,
         "3"
       ),
       getItem(

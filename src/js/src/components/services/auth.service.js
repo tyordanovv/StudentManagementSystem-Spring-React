@@ -22,27 +22,43 @@ const register = async (user, onClose) => {
 };
 
 // axios.post((apiUrls.Auth + "register", props));
-const login = async (username, password) => {
-  console.log("start");
-  const response = await axios
-    .post(apiUrls.Auth + "login", {
-      username,
-      password,
+const login = async (username, password, setAuth) => {
+  return await axios
+    .post(
+      apiUrls.Auth + "login",
+      JSON.stringify({
+        username,
+        password,
+      }),
+      {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+      }
+    )
+    .then(function (response) {
+      if (response?.data) {
+        setAuth(response?.data);
+        localStorage.setItem("user", response?.data);
+        console.log(response.data);
+      }
     })
     .catch(function (error) {
-      errorNotification(
-        "Bad credentials",
-        "Username or password that you have entered cannot be found!"
-      );
+      if (!error?.response) {
+        errorNotification("Bad credentials", "No response");
+      } else if (error.response?.status === 400) {
+        errorNotification(
+          "Bad credentials",
+          "Username or password is missing!"
+        );
+      } else if (error.response?.status === 401) {
+        errorNotification(
+          "Bad credentials",
+          "Username or password that you have entered cannot be found!"
+        );
+      } else {
+        errorNotification("Bad credentials", "Login failed!");
+      }
     });
-  if (response.data.username) {
-    console.log("user stored");
-    localStorage.setItem("user", JSON.stringify(response.data));
-  }
-  return response.data;
-
-  // console.log(response.data);
-  // return response.data;
 };
 
 const logout = () => {
