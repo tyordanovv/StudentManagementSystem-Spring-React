@@ -48,13 +48,10 @@ public class AuthenticationController {
     PasswordEncoder passwordEncoder;
 
     @Autowired
-    UserRepository repository;
-
-    @Autowired
     JwtUtils jwtUtils;
 
-    @Autowired
-    UserDetailsServiceImplementation userDetailsServiceImplementation;
+//    @Autowired
+//    UserDetailsServiceImplementation userDetailsServiceImplementation;
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
@@ -105,11 +102,6 @@ public class AuthenticationController {
                     .body(new RuntimeException("Email is taken!"));
         }
 
-        System.out.println(registerRequest.getGender());
-        System.out.println(registerRequest.getAddress());
-        System.out.println(registerRequest.getNumber());
-        System.out.println(registerRequest.getBirthday());
-        System.out.println(registerRequest.getPassword());
         Gender userGender;
         if (registerRequest.getGender().equals("male")){
             userGender = Gender.MALE;
@@ -136,30 +128,31 @@ public class AuthenticationController {
         } else {
             stringSet.forEach(role -> {
                 switch (role) {
-                    case "admin":
+                    case "admin" -> {
                         Role adminRole = roleRepository.findByName(RoleType.ROLE_ADMIN)
                                 .orElseThrow(() -> new RuntimeException("ROLE ADMIN IS NOT FOUND"));
                         roles.add(adminRole);
-                        break;
-                    case "student":
+                    }
+                    case "student" -> {
                         Role studentRole = roleRepository.findByName(RoleType.ROLE_STUDENT)
                                 .orElseThrow(() -> new RuntimeException("ROLE STUDENT IS NOT FOUND"));
                         roles.add(studentRole);
-                        break;
-                    case "teacher":
+                    }
+                    case "teacher" -> {
                         Role teacherRole = roleRepository.findByName(RoleType.ROLE_TEACHER)
                                 .orElseThrow(() -> new RuntimeException("ROLE TEACHER IS NOT FOUND"));
                         roles.add(teacherRole);
-                        break;
-                    case "assistant":
+                    }
+                    case "assistant" -> {
                         Role assistantRole = roleRepository.findByName(RoleType.ROLE_ASSISTANT)
                                 .orElseThrow(() -> new RuntimeException("ROLE ASSISTANT IS NOT FOUND"));
                         roles.add(assistantRole);
-                        break;
-                    default:
+                    }
+                    default -> {
                         Role userRole = roleRepository.findByName(RoleType.ROLE_USER)
                                 .orElseThrow(() -> new RuntimeException("ROLE USER IS NOT FOUND"));
                         roles.add(userRole);
+                    }
                 }
             });
         }

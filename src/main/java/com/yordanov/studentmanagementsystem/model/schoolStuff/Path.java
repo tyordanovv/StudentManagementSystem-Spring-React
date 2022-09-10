@@ -41,6 +41,9 @@ public class Path {
     @NotNull
     private int semesters;
 
+    @NotNull
+    private int maxStudents;
+
     @ManyToMany
     @JoinTable(
             name = "path_subjects",
@@ -52,7 +55,8 @@ public class Path {
     public Path(
             String name,
             String description,
-            StudyType type
+            StudyType type,
+            int maxStudents
     ){
         this.name = name;
         this.description = description;
@@ -62,5 +66,6 @@ public class Path {
         } else if (type == StudyType.MASTER){
             this.semesters = 3;
         }
+        this.maxStudents = maxStudents;
     }
 }

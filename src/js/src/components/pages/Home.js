@@ -10,6 +10,7 @@ import { Layout, Menu, PageHeader } from "antd";
 import React, { useState, useEffect } from "react";
 import CreatePath from "../drawers/CreatePath";
 import CreateSubject from "../drawers/CreateSubject";
+import { useAuth } from "../common/AuthProvider";
 
 const { Content, Footer, Sider } = Layout;
 
@@ -23,7 +24,7 @@ function getItem(label, key, icon, children) {
 }
 
 const Home = (props) => {
-  console.log("in3");
+  const auth = useAuth();
   const [content, setContent] = useState("");
   const [collapsed, setCollapsed] = useState(false);
   const [visibleRegisterDrawer, setVisibleRegisterDrawer] = useState(false);
@@ -53,11 +54,9 @@ const Home = (props) => {
       getItem("View Path", "1", null, []),
       getItem("View Subjets", "2", null, []),
       getItem(
-        <p>
-          <a href="#" onClick={showPathDrawer}>
-            Create Path
-          </a>
-        </p>,
+        <a href="#" onClick={showPathDrawer}>
+          Create Path
+        </a>,
         "3"
       ),
       getItem(

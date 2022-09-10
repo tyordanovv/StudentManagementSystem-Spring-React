@@ -1,18 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, Form, Input } from "antd";
 import AuthService from "../services/auth.service";
 import { useContext } from "react";
-import AuthContext from "../common/AuthProvider";
+import AuthContext, { useAuth } from "../common/AuthProvider";
+import { useNavigate } from "react-router-dom";
 
-export default function Login(props) {
-  const { setAuth } = useContext(AuthContext);
+export default function Login() {
+  const auth = useAuth();
+  const navigate = useNavigate();
 
   const onFinishFailed = (errorInfo) => {
     console.log(errorInfo);
   };
 
   const formSubmitHandler = (values) => {
-    AuthService.login(values.username, values.password, setAuth);
+    AuthService.login(values.username, values.password);
+    const user = AuthService.getCurrentUser();
+    auth.login(user);
+    if (auth.auth) {
+      navigate("/home", { replace: true });
+    }
   };
 
   return (

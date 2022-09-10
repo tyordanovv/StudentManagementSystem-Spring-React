@@ -12,12 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @RestController
-@RequestMapping("/api/v1/user/")
+@RequestMapping("/api/v1/user")
 public class UserController {
 
     @Autowired
@@ -28,6 +26,7 @@ public class UserController {
 
     @GetMapping("/teachers")
     public ResponseEntity<?> getTeachers(){
+        System.out.println("in teachers");
 
         Role teacherRole = roleRepository.findByName(RoleType.ROLE_TEACHER)
                 .orElseThrow(() -> new RuntimeException("ROLE TEACHER IS NOT FOUND"));
@@ -35,9 +34,10 @@ public class UserController {
         roles.add(teacherRole);
 
         List <User> teachers = staffService.findAllByRoles(teacherRole);
+        System.out.println(teachers);
         return ResponseEntity.ok(
                 teachers
         );
 
-    };
+    }
 }

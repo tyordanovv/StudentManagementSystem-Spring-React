@@ -22,7 +22,7 @@ const register = async (user, onClose) => {
 };
 
 // axios.post((apiUrls.Auth + "register", props));
-const login = async (username, password, setAuth) => {
+const login = async (username, password) => {
   return await axios
     .post(
       apiUrls.Auth + "login",
@@ -37,9 +37,10 @@ const login = async (username, password, setAuth) => {
     )
     .then(function (response) {
       if (response?.data) {
-        setAuth(response?.data);
-        localStorage.setItem("user", response?.data);
+        console.log(response?.data);
+        localStorage.setItem("user", JSON.stringify(response?.data));
         console.log(response.data);
+        // window.location.reload(false);
       }
     })
     .catch(function (error) {

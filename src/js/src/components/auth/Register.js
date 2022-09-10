@@ -32,13 +32,14 @@ const Register = (props) => {
   };
 
   const onFinish = (values) => {
+    let types = values.type.split(" ");
     const user = {
       firstName: values.firstName,
       lastName: values.lastName,
       birthday: formatDate(values.birthday._d),
       email: values.email,
       password: values.password,
-      roles: values.type,
+      strRoles: types,
       address: values.address,
       gender: values.gender,
       number: values.number,

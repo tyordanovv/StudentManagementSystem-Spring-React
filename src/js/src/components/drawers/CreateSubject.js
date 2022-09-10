@@ -1,30 +1,46 @@
-import {
-  Button,
-  Col,
-  DatePicker,
-  Drawer,
-  Form,
-  Input,
-  Row,
-  Select,
-  Space,
-} from "antd";
-import AuthService from "../services/auth.service";
-import SchoolStuff from "../services/SchoolStuff";
+import { Button, Col, Drawer, Form, Input, Row, Select, Space } from "antd";
+// import SchoolStuff from "../services/SchoolStuff";
 import { errorNotification } from "../common/Notification";
 import { useEffect, useState } from "react";
+import axios from "axios";
+import { apiUrls } from "../common/variables";
+import authHeader from "../services/auth.header";
+import ScoolStuff from "../services/SchoolStuff";
 
 const CreateSubject = (props) => {
-  const [teachers, setTeachers] = useState({});
+  const [teachers, setTeachers] = useState([]);
+  const children = [];
+  const { Option } = Select;
 
+  teachers.forEach((teacher) => {
+    console.log(teacher.id);
+    children.push(
+      <Option key={teacher.id} value={teacher.id}>
+        {teacher.firstName}
+      </Option>
+    );
+  });
+
+  const getTeachers = async () => {
+    const token = authHeader();
+    return await axios
+      .get(apiUrls.Users + "teachers", {
+        headers: token,
+      })
+      .then((response) => {
+        if (response?.data) {
+          setTeachers(response.data);
+        }
+      });
+  };
   useEffect(() => {
-    setTeachers(SchoolStuff.getTeachers());
-    console.log(teachers);
+    getTeachers();
   }, []);
 
   const onFinish = (values) => {
     const subject = {};
-    console.log(subject);
+    ScoolStuff.saveSubject(values);
+    console.log(values);
     //schoolstuff service
   };
 
@@ -53,169 +69,49 @@ const CreateSubject = (props) => {
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
-                name="firstName"
-                label="First Name"
+                name="name"
+                label="Name"
                 rules={[
                   {
                     required: true,
-                    message: "Please enter user first name",
+                    message: "Please enter subject name",
                   },
                 ]}
               >
-                <Input placeholder="Please enter user first name" />
+                <Input placeholder="Please enter subject name" />
               </Form.Item>
             </Col>
-            <Col span={12}>
+          </Row>
+          <Row gutter={16}>
+            <Col span={24}>
               <Form.Item
-                name="lastName"
-                label="Last Name"
+                name="description"
+                label="Description"
                 rules={[
                   {
                     required: true,
-                    message: "Please enter user last name",
+                    message: "Please add basic description for the subject",
                   },
                 ]}
               >
-                <Input placeholder="Please enter user last name" />
+                <Input.TextArea placeholder="max 256" />
               </Form.Item>
             </Col>
           </Row>
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
-                name="address"
-                label="Address"
+                name="teachers"
+                label="Teachers"
                 rules={[
                   {
-                    required: true,
-                    message: "Please enter user address",
+                    required: false,
+                    type: "array",
                   },
                 ]}
               >
-                <Input placeholder="Please enter user address" />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item
-                name="gender"
-                label="Gender"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please choose gender",
-                  },
-                ]}
-              >
-                <Select placeholder="Please choose gender">
-                  {/* <Option value="male">Male</Option>
-                      <Option value="female">Female</Option> */}
-                </Select>
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item
-                name="number"
-                label="Number"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter user number",
-                  },
-                ]}
-              >
-                <Input
-                  maxLength="9"
-                  type="number"
-                  addonBefore="+359 "
-                  placeholder="Please enter user phone number"
-                />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item
-                name="email"
-                label="Email"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter user email",
-                  },
-                  {
-                    type: "email",
-                    message: "The input is not valid E-mail!",
-                  },
-                ]}
-              >
-                <Input placeholder="Please enter user email" />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item
-                name="password"
-                label="Password"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter user password",
-                  },
-                ]}
-                hasFeedback
-              >
-                <Input.Password placeholder="Please enter user password" />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item
-                name="confirm-password"
-                label="Confirm Password"
-                dependencies={["password"]}
-                hasFeedback
-                rules={[
-                  {
-                    required: true,
-                    message: "Please confirm user password",
-                  },
-                  ({ getFieldValue }) => ({
-                    validator(_, value) {
-                      if (!value || getFieldValue("password") === value) {
-                        return Promise.resolve();
-                      }
-
-                      return Promise.reject(
-                        new Error(
-                          "The two passwords that you entered do not match!"
-                        )
-                      );
-                    },
-                  }),
-                ]}
-              >
-                <Input.Password placeholder="Please confirm user password" />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item
-                name="type"
-                label="Type"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please choose the type",
-                  },
-                ]}
-              >
-                <Select placeholder="Please choose the type">
-                  {/* <Option value="teacher">Teacher</Option>
-                      <Option value="assistant">Assistant</Option>
-                      <Option value="student">Student</Option> */}
+                <Select placeholder="Please choose teachers" mode="multiple">
+                  {children}
                 </Select>
               </Form.Item>
             </Col>

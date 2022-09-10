@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Table(
@@ -35,9 +36,6 @@ public class Subject {
     @NotNull
     private String description;
 
-    @NotNull
-    private int semester;
-
     @ManyToMany
     @JoinTable(
             name = "subject_teachers",
@@ -46,13 +44,14 @@ public class Subject {
     )
     private Set<User> teachers = new HashSet<>();
 
+    private int semester;
     public Subject(
             String name,
             String description,
-            int semester
+            Set<User> teachers
     ){
         this.name = name;
         this.description = description;
-        this.semester = semester;
+        this.teachers = teachers;
     }
 }

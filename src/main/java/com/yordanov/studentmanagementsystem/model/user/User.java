@@ -2,7 +2,6 @@ package com.yordanov.studentmanagementsystem.model.user;
 
 import com.sun.istack.NotNull;
 import com.yordanov.studentmanagementsystem.enums.Gender;
-import com.yordanov.studentmanagementsystem.model.relation.UserProject;
 import com.yordanov.studentmanagementsystem.model.role.Role;
 import lombok.Getter;
 import lombok.Setter;
@@ -72,21 +71,6 @@ public class User implements Serializable {
     joinColumns = @JoinColumn(name = "user_id"),
     inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
-
-    @OneToMany(mappedBy = "user")
-    private Set<UserProject> userProjects = new HashSet<>();
-
-    public Set<UserProject> getUserProjects() {
-        return userProjects;
-    }
-
-    public void setUserProjects(Set<UserProject> projects) {
-        this.userProjects = projects;
-    }
-
-    public void addUserProjects(UserProject userProject) {
-        this.userProjects.add(userProject);
-    }
     public User(){}
 
     public User(

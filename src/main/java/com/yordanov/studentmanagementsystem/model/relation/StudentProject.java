@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "student_projects")
 @NoArgsConstructor
-public class UserProject {
+public class StudentProject {
     @Id
     @GeneratedValue
     @Column(name = "student_project_id")

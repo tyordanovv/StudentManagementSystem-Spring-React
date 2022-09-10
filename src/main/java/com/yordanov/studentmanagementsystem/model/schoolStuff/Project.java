@@ -1,7 +1,7 @@
 package com.yordanov.studentmanagementsystem.model.schoolStuff;
 
 import com.sun.istack.NotNull;
-import com.yordanov.studentmanagementsystem.model.relation.UserProject;
+import com.yordanov.studentmanagementsystem.model.relation.StudentProject;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -32,7 +32,7 @@ public class Project {
     private String description;
 
     @OneToMany(mappedBy = "project")
-    private Set<UserProject> userProjects = new HashSet<>();
+    private Set<StudentProject> studentProjects = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "subject_id")
@@ -47,16 +47,16 @@ public class Project {
         this.description = description;
         this.subject = subject;
     }
-    public Set<UserProject> getUserProjects() {
-        return userProjects;
+    public Set<StudentProject> getStudentProjects() {
+        return studentProjects;
     }
 
-    public void setUserProjects(Set<UserProject> projects) {
-        this.userProjects = projects;
+    public void setStudentProjects(Set<StudentProject> projects) {
+        this.studentProjects = projects;
     }
 
-    public void addUserProjects(UserProject userProject) {
-        this.userProjects.add(userProject);
+    public void addUserProjects(StudentProject studentProject) {
+        this.studentProjects.add(studentProject);
     }
 
 }
