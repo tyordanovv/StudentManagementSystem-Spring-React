@@ -37,9 +37,10 @@ const login = async (username, password) => {
     )
     .then(function (response) {
       if (response?.data) {
+        console.log(response);
         console.log(response?.data);
         localStorage.setItem("user", JSON.stringify(response?.data));
-        console.log(response.data);
+        console.log(JSON.stringify(response?.data));
         // window.location.reload(false);
       }
     })
@@ -67,6 +68,7 @@ const logout = () => {
 };
 
 const getCurrentUser = () => {
+  console.log(localStorage.getItem("user"));
   return JSON.parse(localStorage.getItem("user"));
 };
 

@@ -45,6 +45,8 @@ public class Subject {
     private Set<User> teachers = new HashSet<>();
 
     private int semester;
+
+    private boolean taken;
     public Subject(
             String name,
             String description,
@@ -53,5 +55,6 @@ public class Subject {
         this.name = name;
         this.description = description;
         this.teachers = teachers;
+        this.taken = false;
     }
 }

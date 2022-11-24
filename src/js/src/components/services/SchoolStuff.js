@@ -1,6 +1,5 @@
 import axios from "axios";
 import { apiUrls } from "../common/variables";
-import authHeader from "./auth.header";
 
 const saveSubject = async (subject, onClose) => {
   let token = JSON.parse(localStorage.getItem("user")).accessToken;
@@ -13,9 +12,9 @@ const saveSubject = async (subject, onClose) => {
       "Access-Control-Allow-Origin": "*",
     },
   };
-  // axios
-  //   .post(apiUrls.SchoolStuff + "save/subject", subjectJSON, axiosConfig)
-  //   .then();
+  axios
+    .post(apiUrls.SchoolStuff + "save/subject", subjectJSON, axiosConfig)
+    .then();
 };
 
 const SchoolStuff = {

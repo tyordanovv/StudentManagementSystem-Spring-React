@@ -1,19 +1,17 @@
 package com.yordanov.studentmanagementsystem.model.user;
 
+import com.yordanov.studentmanagementsystem.enums.Gender;
 import com.yordanov.studentmanagementsystem.model.relation.StudentProject;
 import com.yordanov.studentmanagementsystem.model.schoolStuff.Subject;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
 public class Student extends User{
@@ -31,6 +29,7 @@ public class Student extends User{
     )
     Set<Subject> subjects = new HashSet<>();
 
+    public Student(){};
 
     public void addSubject(Subject subject){
         this.subjects.add(subject);

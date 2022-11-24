@@ -1,5 +1,4 @@
 import { Button, Col, Drawer, Form, Input, Row, Select, Space } from "antd";
-// import SchoolStuff from "../services/SchoolStuff";
 import { errorNotification } from "../common/Notification";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -38,15 +37,11 @@ const CreateSubject = (props) => {
   }, []);
 
   const onFinish = (values) => {
-    const subject = {};
     ScoolStuff.saveSubject(values);
-    console.log(values);
-    //schoolstuff service
   };
 
   const onFinishFailed = () => {
     errorNotification("Insufficient data", "Please fill all the fields!");
-    console.log("fail");
   };
 
   return (

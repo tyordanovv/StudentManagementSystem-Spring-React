@@ -3,13 +3,13 @@ package com.yordanov.studentmanagementsystem.web.controller;
 import com.yordanov.studentmanagementsystem.enums.Gender;
 import com.yordanov.studentmanagementsystem.enums.RoleType;
 import com.yordanov.studentmanagementsystem.model.role.Role;
+import com.yordanov.studentmanagementsystem.model.user.Student;
 import com.yordanov.studentmanagementsystem.model.user.User;
 import com.yordanov.studentmanagementsystem.repository.RoleRepository;
 import com.yordanov.studentmanagementsystem.repository.UserRepository;
 import com.yordanov.studentmanagementsystem.requestBodies.LoginRequest;
 import com.yordanov.studentmanagementsystem.requestBodies.RegisterRequest;
 import com.yordanov.studentmanagementsystem.service.userDetails.UserDetailsImplementation;
-import com.yordanov.studentmanagementsystem.service.userDetails.UserDetailsServiceImplementation;
 import com.yordanov.studentmanagementsystem.utils.Generator;
 import com.yordanov.studentmanagementsystem.web.jwt.JWTResponse;
 import com.yordanov.studentmanagementsystem.web.jwt.JwtUtils;
@@ -30,6 +30,7 @@ import java.text.ParseException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 @RestController
@@ -107,58 +108,64 @@ public class AuthenticationController {
             userGender = Gender.MALE;
         }else userGender = Gender.FEMALE;
 
-        User user = new User(
-                username,
-                passwordEncoder.encode(registerRequest.getPassword()),
-                registerRequest.getFirstName(),
-                registerRequest.getLastName(),
-                registerRequest.getEmail(),
-                registerRequest.getBirthday(),
-                registerRequest.getAddress(),
-                Integer.parseInt(registerRequest.getNumber()),
-                userGender
-        );
         Set<String> stringSet = registerRequest.getStrRoles();
         Set<Role> roles = new HashSet<>();
+
+        User user = null;
 
         if (stringSet == null){
             Role userRole = roleRepository.findByName(RoleType.ROLE_USER)
                     .orElseThrow(() -> new RuntimeException("ROLE USER IS NOT FOUND!"));
             roles.add(userRole);
         } else {
-            stringSet.forEach(role -> {
+            for (String role : stringSet){
                 switch (role) {
                     case "admin" -> {
                         Role adminRole = roleRepository.findByName(RoleType.ROLE_ADMIN)
                                 .orElseThrow(() -> new RuntimeException("ROLE ADMIN IS NOT FOUND"));
                         roles.add(adminRole);
+                        user = new User();
                     }
                     case "student" -> {
                         Role studentRole = roleRepository.findByName(RoleType.ROLE_STUDENT)
                                 .orElseThrow(() -> new RuntimeException("ROLE STUDENT IS NOT FOUND"));
                         roles.add(studentRole);
+                        user = new Student();
                     }
                     case "teacher" -> {
                         Role teacherRole = roleRepository.findByName(RoleType.ROLE_TEACHER)
                                 .orElseThrow(() -> new RuntimeException("ROLE TEACHER IS NOT FOUND"));
                         roles.add(teacherRole);
+                        user = new User();
                     }
                     case "assistant" -> {
                         Role assistantRole = roleRepository.findByName(RoleType.ROLE_ASSISTANT)
                                 .orElseThrow(() -> new RuntimeException("ROLE ASSISTANT IS NOT FOUND"));
                         roles.add(assistantRole);
+                        user = new User();
                     }
                     default -> {
                         Role userRole = roleRepository.findByName(RoleType.ROLE_USER)
                                 .orElseThrow(() -> new RuntimeException("ROLE USER IS NOT FOUND"));
                         roles.add(userRole);
+                        user = new User();
                     }
                 }
-            });
+            }
         }
-
+        
+        user.setUsername(username);
+        user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
+        user.setFirstName(registerRequest.getFirstName());
+        user.setLastName(registerRequest.getLastName());
+        user.setEmail(registerRequest.getEmail());
+        user.setBirthday(registerRequest.getBirthday());
+        user.setAddress(registerRequest.getAddress());
+        user.setNumber(Integer.parseInt(registerRequest.getNumber()));
+        user.setGender(userGender);
         user.setRoles(roles);
         staffRepository.save(user);
+
         return ResponseEntity.ok(new RuntimeException("successfully created"));
     }
 }

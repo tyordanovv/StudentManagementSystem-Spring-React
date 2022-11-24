@@ -100,4 +100,8 @@ public class User implements Serializable {
             return "00/00/0000";
         }else return birthday.toString();
     }
+
+    public void setBirthday(String birthday) throws ParseException {
+        this.birthday = new SimpleDateFormat("dd/MM/yyyy").parse(birthday);
+    }
 }
